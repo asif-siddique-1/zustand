@@ -123,6 +123,58 @@ export const useTodoStore = create(
 
 ---
 
+### 🛡️ Making Your Store Persistent
+
+You can easily convert a normal Zustand store to a persistent one with a single change! This allows your state to survive page reloads by saving it to `localStorage` (or another storage backend).
+
+**Before: Basic Store**
+```ts
+import { create } from "zustand";
+
+export const useTodoStore = create((set) => ({
+  todos: [],
+  addTodo: (todo) => set((state) => ({ todos: [...state.todos, todo] })),
+  removeTodo: (id) => set((state) => ({ todos: state.todos.filter(t => t.id !== id) })),
+}));
+```
+
+**After: Persistent Store**
+```ts
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+export const useTodoStore = create(
+  persist(
+    (set) => ({
+      todos: [],
+      addTodo: (todo) => set((state) => ({ todos: [...state.todos, todo] })),
+      removeTodo: (id) => set((state) => ({ todos: state.todos.filter(t => t.id !== id) })),
+    }),
+    { name: "todo-store" } // unique key in localStorage
+  )
+);
+```
+
+**How `persist` Works:**
+- Wraps your store logic.
+- Automatically saves state to `localStorage` (or your chosen storage) on every change.
+- Restores state from storage when the app loads.
+
+```mermaid
+flowchart LR
+  A[App Loads] -- check localStorage --> B{State Exists?}
+  B -- Yes --> C[Hydrate Store from Storage]
+  B -- No  --> D[Use Initial Store State]
+  C & D --> E[User Interacts]
+  E --> F[Store Updates]
+  F --> G[State Saved to localStorage]
+  G --> E
+```
+
+> 📝 **Tip:** You can customize what gets persisted and even use sessionStorage or custom storage engines!
+
+---
+
 #### 5️⃣ 🔄 Flow Overview
 
 ```mermaid
