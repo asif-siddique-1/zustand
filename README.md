@@ -112,15 +112,14 @@ export const useTodoStore = create(
 
 #### 5️⃣ 🔄 Flow Overview
 
-> ℹ️ **Note:** The diagram below uses ASCII for maximum compatibility. If you prefer a graphical flow, you can use a tool like Mermaid Live Editor.
-
 ```mermaid
 graph TD
-    A[User Action] --> B[Zod Validation]
-    B --> |invalid| C[Show Error]
-    B --> |valid| D[Zustand set() --> State Updated]
-    D --> E[Persist to localStorage]
-    D --> F[Component Rerenders]
+  A[User Action (Add/Remove Todo)] --> B{Zod Validation}
+  B -- invalid --> C[Show Error]
+  B -- valid --> D[Zustand set()]
+  D --> E[State Updated]
+  E --> F[Persist to localStorage]
+  E --> G[Component Rerenders]
 ```
 
 - **Validation happens at the UI/form layer, not in the store.**
