@@ -114,9 +114,9 @@ export const useTodoStore = create(
 
 ```mermaid
 graph TD
-  A[User Action (Add/Remove Todo)] --> B{Zod Validation}
+  A[User Action Add/Remove Todo] --> B{Zod Validation}
   B -- invalid --> C[Show Error]
-  B -- valid --> D[Zustand set()]
+  B -- valid --> D[Zustand set]
   D --> E[State Updated]
   E --> F[Persist to localStorage]
   E --> G[Component Rerenders]
