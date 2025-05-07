@@ -10,6 +10,12 @@ A simple and interactive proof-of-concept (POC) app demonstrating:
 
 ## 🚀 Quick Start
 
+> 🟢 **Get started in seconds!**
+>
+> 1. Clone the repo
+> 2. Install dependencies
+> 3. Run the dev server
+
 ```bash
 npm install
 npm run dev
@@ -20,6 +26,13 @@ Visit [http://localhost:3000](http://localhost:3000)
 ---
 
 ## 🧠 Key Concepts
+
+```mermaid
+flowchart LR
+  UI[User Interface] -- form input/validation --> Zod
+  Zod -- validated data --> Zustand
+  Zustand -- state --> UI
+```
 
 ### Zustand (State Management)
 
@@ -143,6 +156,15 @@ graph TD
 
 ## 📁 Project Structure (Key Files)
 
+```mermaid
+graph TD
+  A[src/stores/userStore.ts] --> B[src/stores/todoStore.ts]
+  B --> C[src/components/todoForm.tsx]
+  C --> D[src/app/login/page.tsx]
+  C --> E[src/app/todo/page.tsx]
+  D --> F[src/app/page.tsx]
+```
+
 - `src/stores/userStore.ts` — Zustand store for user state
 - `src/stores/todoStore.ts` — Zustand store for todos
 - `src/components/todoForm.tsx` — Todo form with Zod validation
@@ -158,6 +180,11 @@ graph TD
 - **Todos**: Add, view, and manage todos (state persists)
 - **Validation**: Todo form input is validated using Zod before adding
 - **Conditional Routing**: Redirects based on auth state
+
+### 🗂️ Todo Status Legend
+- ✅ Completed todo
+- ⏳ Pending todo
+- 🗑️ Delete todo
 
 ---
 
