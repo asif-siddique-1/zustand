@@ -50,9 +50,11 @@ Visit [http://localhost:3000](http://localhost:3000)
 
 Zustand is the heart of state management in this POC. It’s minimal, powerful, and easy to use.
 
-### How Zustand Works:
+---
 
-#### 1. Store Creation
+### ✨ How Zustand Works
+
+#### 1️⃣ Store Creation
 
 ```ts
 import { create } from "zustand";
@@ -64,20 +66,28 @@ export const useTodoStore = create((set) => ({
     set((state) => ({ todos: state.todos.filter((t) => t.id !== id) })),
 }));
 ```
+> Create your store using `create()`. Define state and updater functions.
 
-#### 2. Updating State (set)
+---
 
-- `set` is Zustand’s way to update state.
+#### 2️⃣ Updating State
+
+- Use the `set` function to update state.
 - Any update triggers a rerender in components that use the changed state.
 
-#### 3. Using State in Components
+---
+
+#### 3️⃣ Using State in Components
 
 ```ts
 const { todos, addTodo } = useTodoStore();
 addTodo(newTodo); // Updates state and rerenders subscribers
 ```
+> Access and update state directly in your components.
 
-#### 4. Persistence
+---
+
+#### 4️⃣ 🗄️ Persistence
 
 - With `persist`, state is saved to localStorage and restored on reload.
 
@@ -93,29 +103,30 @@ export const useTodoStore = create(
   )
 );
 ```
+> Persist your state with a single middleware.
 
-#### 5. Flow Diagram
+---
 
-```
-User Action (Add/Remove Todo)
-   |
-   v
-Zod Validation (in Form/UI)
-   |
-   |-- invalid --> Show Error
-   |
-   |-- valid --> Zustand set() ➡️ State Updated ➡️
-          |                             |
-          v                             v
-   Persist to localStorage      Component Rerenders
+#### 5️⃣ 🔄 Flow Overview
+
+```mermaid
+graph TD
+  A[User Action (Add/Remove Todo)] --> B{Zod Validation}
+  B -- invalid --> C[Show Error]
+  B -- valid --> D[Zustand set()]
+  D --> E[State Updated]
+  E --> F[Persist to localStorage]
+  E --> G[Component Rerenders]
 ```
 
 - **Validation happens at the UI/form layer, not in the store.**
 - **No Redux-style middleware or action-wrapping is needed.**
 
-#### 6. Why Don't We Wrap Store Logic in Zod (like Redux middleware)?
+---
 
-- Zustand is designed to be minimal and direct: state is updated via hooks, not dispatched actions.
+#### 6️⃣ 💡 Why Not Zod in Store?
+
+- Zustand is minimal and direct: state is updated via hooks, not dispatched actions.
 - Validation is handled at the UI/form level (using Zod + React Hook Form) before any state update.
 - This keeps store logic clean and focused only on state, not validation or side effects.
 - If you need cross-cutting logic (like in Redux middleware), you can still add custom hooks or middleware, but for most apps, UI-level validation is simpler and more maintainable.
