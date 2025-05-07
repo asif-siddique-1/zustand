@@ -147,15 +147,6 @@ Zod Validation (in Form/UI)
 
 ---
 
-## 🤝 Extending This POC
-
-- Add more fields to the todo (update Zod schema & store)
-- Integrate API calls for persistent storage
-- Add user registration or real authentication
-- Enhance UI/UX with more features
-
----
-
 ## 💡 Why Zustand & Zod?
 
 - **Zustand**: Minimal, scalable, and easy-to-use state management
