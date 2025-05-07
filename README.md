@@ -27,74 +27,77 @@ Visit [http://localhost:3000](http://localhost:3000)
   const { user, login, logout } = userStore();
   ```
 
-### Zod (Validation & Flow)
-Zod is used for robust, type-safe validation of todo input fields. Here's how it fits into the app:
+### Zod (Validation)
+- Used for simple, type-safe validation of form input.
+- Ensures only valid todos reach your app's state.
+- Example:
+  ```ts
+  // src/utils/todoSchema.ts
+  import { z } from "zod";
+  export const todoSchema = z.object({
+    title: z.string().min(3),
+    dueDate: z.string(),
+  });
+  ```
 
-#### 1. Schema Definition
-All todo validations are defined in a single schema:
+---
+
+## 🏪 Zustand (State Management, Updates & Persistence)
+Zustand is the heart of state management in this POC. It’s minimal, powerful, and easy to use.
+
+### How Zustand Works:
+
+#### 1. Store Creation
 ```ts
-// src/utils/todoSchema.ts
-import { z } from "zod";
-export const todoSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters long"),
-  dueDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
-    message: "Invalid date",
-  }),
-});
-export type TodoInput = z.infer<typeof todoSchema>;
+import { create } from "zustand";
+
+export const useTodoStore = create((set) => ({
+  todos: [],
+  addTodo: (todo) => set((state) => ({ todos: [...state.todos, todo] })),
+  removeTodo: (id) => set((state) => ({ todos: state.todos.filter(t => t.id !== id) })),
+}));
 ```
 
-#### 2. Form Integration
-The schema is used with React Hook Form for instant feedback and error handling:
-```ts
-// src/components/todoForm.tsx
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { todoSchema, TodoInput } from "@/utils/todoSchema";
+#### 2. Updating State (set)
+- `set` is Zustand’s way to update state.
+- Any update triggers a rerender in components that use the changed state.
 
-const { register, handleSubmit, formState: { errors }, reset } = useForm<TodoInput>({
-  resolver: zodResolver(todoSchema),
-});
+#### 3. Using State in Components
+```ts
+const { todos, addTodo } = useTodoStore();
+addTodo(newTodo); // Updates state and rerenders subscribers
 ```
-- On submit, only valid data passes to the store.
 
-#### 3. Store Updates & Persistence
-When a todo passes validation, it's added to the Zustand store and persisted in localStorage:
+#### 4. Persistence
+- With `persist`, state is saved to localStorage and restored on reload.
 ```ts
-// src/components/todoForm.tsx
-const onSubmit = (data: TodoInput) => {
-  addTodo({ ...data, id: uuidv4() });
-  reset();
-};
-```
-```ts
-// src/stores/todoStore.ts
-export const useTodoStore = create<TodoStore>()(
+import { persist } from "zustand/middleware";
+
+export const useTodoStore = create(
   persist(
-    (set) => ({
-      todos: [],
-      addTodo: (todo: Todo) => set((state) => ({ todos: [...state.todos, todo] })),
-      // ...
-    }),
-    {
-      name: "todo-store",
-      storage: createJSONStorage(() => localStorage),
-    }
+    (set) => ({ /* ... */ }),
+    { name: "todo-store" }
   )
 );
 ```
 
-#### 4. Flow Summary
-1. **User fills the todo form** →
-2. **Zod validates input** via schema on submit →
-3. **Valid data** is sent to Zustand store (`addTodo`) →
-4. **Todos are persisted** in localStorage automatically
+#### 5. Flow Diagram
+```mermaid
+flowchart LR
+  A[User Action: Add/Remove Todo] --> B[Zod Validation]
+  B -- valid --> C[Zustand set()]
+  C --> D[State Updated]
+  D --> E[Component Rerenders]
+  D --> F[Persist to localStorage]
+  B -- invalid --> G[Show Error]
+```
 
-#### 5. Extending Validation
-- Add new fields to `todoSchema` for more complex todos (e.g., priority, description)
-- Update form and store types accordingly
+#### 6. Why Zustand?
+- Minimal API, no boilerplate
+- Reactivity: Only components using changed state rerender
+- Middleware: Easy persistence, devtools, etc.
 
-> **Zod ensures only valid, structured data ever enters your app's state!**
+> **Zustand makes state management a breeze—create, update, persist, and scale with confidence!**
 
 ---
 
