@@ -13,8 +13,10 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm flex flex-col items-center">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Login</h2>
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm flex flex-col items-center ">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 drop-shadow">
+          Welcome to Zustand POC
+        </h2>
         <LoginButton />
       </div>
     </div>

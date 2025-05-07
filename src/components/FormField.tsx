@@ -1,23 +1,20 @@
-import { TodoInput } from "@/utils/todoSchema";
-import { FieldError, UseFormRegister } from "react-hook-form";
+import { FieldError, UseFormRegister, Path } from "react-hook-form";
 
-interface FormFieldProps {
-  name: NameFields;
+interface FormFieldProps<T extends Record<string, any>> {
+  name: Path<T>;
   placeholder: string;
-  register: UseFormRegister<TodoInput>;
+  register: UseFormRegister<T>;
   error: FieldError | undefined;
   type: string;
 }
 
-type NameFields = keyof TodoInput;
-
-export const FormField = ({
+export function FormField<T extends Record<string, any>>({
   name,
   placeholder,
   register,
   error,
   type,
-}: FormFieldProps) => {
+}: FormFieldProps<T>) {
   return (
     <div>
       <input
@@ -29,4 +26,4 @@ export const FormField = ({
       {error && <p className="text-red-500 text-sm mt-1">{error.message}</p>}
     </div>
   );
-};
+}

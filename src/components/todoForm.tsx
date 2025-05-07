@@ -1,7 +1,7 @@
 "use client";
 
 import { useTodoStore } from "@/stores/todoStore";
-import { TodoInput, todoSchema } from "@/utils/todoSchema";
+import { TodoInput, todoSchema } from "@/utils/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
@@ -29,14 +29,14 @@ export const TodoForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-4 items-center"
     >
-      <FormField
+      <FormField<TodoInput>
         name="title"
         placeholder="Title"
         register={register}
         error={errors.title}
         type="text"
       />
-      <FormField
+      <FormField<TodoInput>
         name="dueDate"
         placeholder="Due Date"
         register={register}
