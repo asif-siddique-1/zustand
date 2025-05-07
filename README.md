@@ -66,6 +66,7 @@ export const useTodoStore = create((set) => ({
     set((state) => ({ todos: state.todos.filter((t) => t.id !== id) })),
 }));
 ```
+
 > Create your store using `create()`. Define state and updater functions.
 
 ---
@@ -83,6 +84,7 @@ export const useTodoStore = create((set) => ({
 const { todos, addTodo } = useTodoStore();
 addTodo(newTodo); // Updates state and rerenders subscribers
 ```
+
 > Access and update state directly in your components.
 
 ---
@@ -103,6 +105,7 @@ export const useTodoStore = create(
   )
 );
 ```
+
 > Persist your state with a single middleware.
 
 ---
@@ -111,19 +114,12 @@ export const useTodoStore = create(
 
 > ℹ️ **Note:** The diagram below uses ASCII for maximum compatibility. If you prefer a graphical flow, you can use a tool like Mermaid Live Editor.
 
-```
-User Action (Add/Remove Todo)
-   |
-   v
-Zod Validation (in Form/UI)
-   |
-   |-- invalid --> Show Error
-   |
-   |-- valid --> Zustand set() --> State Updated
-          |                        |
-          v                        v
-   Persist to localStorage   Component Rerenders
-```
+graph TD
+A[User Action (Add/Remove Todo)] --> B[Zod Validation (in Form/UI)]
+B --> |invalid| C[Show Error]
+B --> |valid| D[Zustand set() --> State Updated]
+D --> E[Persist to localStorage]
+D --> F[Component Rerenders]
 
 - **Validation happens at the UI/form layer, not in the store.**
 - **No Redux-style middleware or action-wrapping is needed.**
